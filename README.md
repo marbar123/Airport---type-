@@ -1,4 +1,5 @@
 # Airport---type-
+Before uploading tables to MySQL I used PowerQuery to ETL (extract, transform and load) the data.
 /*application Like ,in*/
 select
 	Id
