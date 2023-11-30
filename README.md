@@ -1,44 +1,5 @@
-# Airport---type-
-Before uploading tables to MySQL I used PowerQuery to ETL (extract, transform and load) the data.
-/*application Like ,in*/
-select
-	Id
-	,`Type` 
-	,continent
-from airports a 
-where `Type` in ('small airport','medium airport')
-       and continent like 'A%'
+# Airport-type:
+Before uploading tables to MySQL I used to PowerQuery to ETL (extract, transform and load) the data.
+Application  Like, in, CTE, cross join, inner join.
+All calculation with short description you can find in file Airports - calculation.txt
 
-/*CTE*/
-       
-with 
-airports_by_continent as(
-	select 
-		continent 
-		,count(Id) as number_of_airports 
-	from airports a 
-	group by 1
-),
-min_max_elevation_ft_m as(
-	select 
-		continent 
-		,min(elevation_ft/100)  as min_elevation_ft  
-		,max(elevation_ft/100) as max_elevation_ft 
-		,min(elevation_m/100) as min_elevation_m
-		,max(elevation_m/100) as max_elevation_m
-	from airports a
-	where elevation_ft <> 0
-	and elevation_m    <> 0
-	group by 1
-),
-total_airports as (
-	select
-	count(id) as total_airports
-	from airports  
-)
-select
-	*
-	,round(((abc.number_of_airports)/(ta.total_airports))*100,2)   as percent_ratio
-from min_max_elevation_ft_m       mmefm
-cross join total_airports         ta
-inner join airports_by_continent  abc on abc.continent = mmefm.continent
